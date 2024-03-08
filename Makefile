@@ -64,7 +64,7 @@ KUBE_VERSION ?= 1.29
 KIND_CONFIG ?= kind-$(KUBE_VERSION).yaml
 KIND_CLUSTER_NAME ?= "otel-operator"
 
-OPERATOR_SDK_VERSION ?= 1.29.0
+OPERATOR_SDK_VERSION ?= 1.34.1
 
 CERTMANAGER_VERSION ?= 1.10.0
 
@@ -106,20 +106,20 @@ test: generate fmt vet ensure-generate-is-noop envtest
 # Build manager binary
 .PHONY: manager
 manager: generate fmt vet
-	CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(ARCH) go build -o bin/manager_${ARCH} -ldflags "${COMMON_LDFLAGS} ${OPERATOR_LDFLAGS}" main.go
+	CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(ARCH) go build -o bin/manager_${ARCH} -ldflags "${COMMON_LDFLAGS} ${OPERATOR_LDFLAGS}" cmd/main.go
 
 # Build target allocator binary
 targetallocator:
-	CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(ARCH) go build -o cmd/otel-allocator/bin/targetallocator_${ARCH} -ldflags "${COMMON_LDFLAGS}" ./cmd/otel-allocator
+	CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(ARCH) go build -o cmd-resources/otel-allocator/bin/targetallocator_${ARCH} -ldflags "${COMMON_LDFLAGS}" ./cmd-resources/otel-allocator
 
 # Build opamp bridge binary
 operator-opamp-bridge:
-	CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(ARCH) go build -o cmd/operator-opamp-bridge/bin/opampbridge_${ARCH} -ldflags "${COMMON_LDFLAGS}" ./cmd/operator-opamp-bridge
+	CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(ARCH) go build -o cmd-resources/operator-opamp-bridge/bin/opampbridge_${ARCH} -ldflags "${COMMON_LDFLAGS}" ./cmd-resources/operator-opamp-bridge
 
 # Run against the configured Kubernetes cluster in ~/.kube/config
 .PHONY: run
 run: generate fmt vet manifests
-	ENABLE_WEBHOOKS=$(ENABLE_WEBHOOKS) go run -ldflags "${OPERATOR_LDFLAGS}" ./main.go --zap-devel
+	ENABLE_WEBHOOKS=$(ENABLE_WEBHOOKS) go run -ldflags "${OPERATOR_LDFLAGS}" ./cmd/main.go --zap-devel
 
 # Install CRDs into a cluster
 .PHONY: install
@@ -286,12 +286,12 @@ container-operator-opamp-bridge-push:
 .PHONY: container-target-allocator
 container-target-allocator: GOOS = linux
 container-target-allocator: targetallocator
-	docker build -t ${TARGETALLOCATOR_IMG} cmd/otel-allocator
+	docker build -t ${TARGETALLOCATOR_IMG} cmd-resources/otel-allocator
 
 .PHONY: container-operator-opamp-bridge
 container-operator-opamp-bridge: GOOS = linux
 container-operator-opamp-bridge: operator-opamp-bridge
-	docker build -t ${OPERATOROPAMPBRIDGE_IMG} cmd/operator-opamp-bridge
+	docker build -t ${OPERATOROPAMPBRIDGE_IMG} cmd-resources/operator-opamp-bridge
 
 .PHONY: start-kind
 start-kind: kind

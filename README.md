@@ -571,7 +571,7 @@ For more information about multi-instrumentation feature capabilities please see
 
 ### Target Allocator
 
-The OpenTelemetry Operator comes with an optional component, the [Target Allocator](/cmd/otel-allocator/README.md) (TA). When creating an OpenTelemetryCollector Custom Resource (CR) and setting the TA as enabled, the Operator will create a new deployment and service to serve specific `http_sd_config` directives for each Collector pod as part of that CR. It will also rewrite the Prometheus receiver configuration in the CR, so that it uses the deployed target allocator. The following example shows how to get started with the Target Allocator:
+The OpenTelemetry Operator comes with an optional component, the [Target Allocator](/cmd-resources/otel-allocator/README.md) (TA). When creating an OpenTelemetryCollector Custom Resource (CR) and setting the TA as enabled, the Operator will create a new deployment and service to serve specific `http_sd_config` directives for each Collector pod as part of that CR. It will also rewrite the Prometheus receiver configuration in the CR, so that it uses the deployed target allocator. The following example shows how to get started with the Target Allocator:
 
 ```yaml
 apiVersion: opentelemetry.io/v1alpha1
@@ -652,7 +652,7 @@ The OpenTelemetry Operator will also convert the Target Allocator's Prometheus c
 
 Note that in this case, the Operator replaces "$$" with a single "$" in the replacement keys. This is because the collector supports environment variable substitution, whereas the TA (Target Allocator) does not. Therefore, to ensure compatibility, the TA configuration should only contain a single "$" symbol.
 
-More info on the TargetAllocator can be found [here](cmd/otel-allocator/README.md).
+More info on the TargetAllocator can be found [here](cmd-resources/otel-allocator/README.md).
 
 #### Using Prometheus Custom Resources for service discovery
 

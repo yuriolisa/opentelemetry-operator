@@ -15,7 +15,7 @@
 package upgrade
 
 import (
-	"github.com/open-telemetry/opentelemetry-operator/apis/v1alpha1"
+	"github.com/open-telemetry/opentelemetry-operator/api/v1alpha1"
 )
 
 // this is our first version under otel/opentelemetry-collector.

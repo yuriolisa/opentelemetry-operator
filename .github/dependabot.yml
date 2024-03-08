@@ -41,11 +41,11 @@ updates:
       interval: weekly
 
   - package-ecosystem: docker
-    directory: /cmd/otel-allocator
+    directory: /cmd-resources/otel-allocator
     schedule:
       interval: weekly
 
   - package-ecosystem: docker
-    directory: /cmd/operator-opamp-bridge
+    directory: /cmd-resources/operator-opamp-bridge
     schedule:
       interval: weekly
